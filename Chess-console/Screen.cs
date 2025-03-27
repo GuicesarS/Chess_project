@@ -11,13 +11,13 @@ namespace chess_console
             {
                 for (int j = 0; j < board.columns; j++)
                 {
-                    if (board.part(i, j) == null)
+                    if (board.piece(i, j) == null)
                     {
                         Console.Write("- ");
                     }
                     else
                     {
-                        Console.Write(board.part(i, j) + " ");
+                        Console.Write(board.piece(i, j) + " ");
 
                     }
                 }
