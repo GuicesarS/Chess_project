@@ -1,7 +1,7 @@
 ﻿
 namespace board
 {
-    class Parts
+    class Piece
     {
         public Position position { get; set; }
         public Color color { get; protected set; }
@@ -9,12 +9,14 @@ namespace board
         public int amountofmoviment { get; protected set; }
         public Board board{ get; protected set; }
 
-        public Parts(Position position, Board board, Color color)
+        public Piece(Board board, Color color)
         {
-            this.position = position;
+            this.position = null;
             this.board = board;
             this.color = color;
             this.amountofmoviment = 0;
         }
     }
+
+
 }
