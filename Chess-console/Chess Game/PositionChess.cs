@@ -14,7 +14,7 @@ namespace Chess_Game
             this.lines = lines;
         }
 
-        public Position convertToPosition()
+        public Position ToPosition()
         {
             return new Position(8 - lines, columns - 'a');
 
