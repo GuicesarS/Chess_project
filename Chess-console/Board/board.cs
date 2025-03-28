@@ -33,12 +33,27 @@ namespace board
 
         public void putPiece(Piece p, Position pos)
         {
-            if(existPiece(pos))
+            if (existPiece(pos))
             {
                 throw new BoardException("Already exist a piece on this position!");
             }
             pieces[pos.lines, pos.columns] = p; // Places the piece at the desired position
             p.position = pos; // Updates the piece's position  
+        }
+
+        public Piece removePiece(Position pos)
+        {
+            if (piece(pos) == null)
+            {
+                return null;
+            }
+            else
+            {
+                Piece aux = piece(pos);
+                aux.position = null;
+                pieces[pos.lines, pos.columns] = null; // Remove piece and uptade position as null
+                return aux;
+            }
         }
 
         public bool validPosition(Position pos)
