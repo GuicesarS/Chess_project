@@ -12,10 +12,16 @@ namespace board
             this.columns = columns;
         }
 
+
+        public void defineValue(int lines, int columns)
+        {
+             this.lines = lines;
+             this.columns = columns;
+        }        
         public override string ToString()
         {
             return $"{lines} , {columns}";
-         }
+        }
 
     }
 }
