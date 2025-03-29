@@ -6,7 +6,7 @@ namespace board
         public Position position { get; set; }
         public Color color { get; protected set; }
 
-        public int amountofmoviment { get; protected set; }
+        public int amountofmovement { get; protected set; }
         public Board board{ get; protected set; }
 
         public Piece(Board board, Color color)
@@ -14,15 +14,35 @@ namespace board
             this.position = null;
             this.board = board;
             this.color = color;
-            this.amountofmoviment = 0;
+            this.amountofmovement = 0;
         }
 
-        public void increaseMoviment()
+        public void increaseMovement()
         {
-            amountofmoviment++;
+            amountofmovement++;
         }
 
-        public abstract bool[,] possibleMoviments();
+        public bool possibleMovementExist()
+        {
+            bool[,] mat = possibleMovements();
+            for (int i=0;i< board.lines;i++)
+            {
+                for (int j=0;j< board.columns;j++)
+                {
+                    if(mat[i,j] == true)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool canMoveFor(Position pos)
+        {
+            return possibleMovements()[pos.lines, pos.columns];
+        }
+            public abstract bool[,] possibleMovements();
         
     }
 

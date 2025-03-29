@@ -6,8 +6,8 @@ namespace Chess_Game
     class ChessMatch
     {
         public Board board { get; private set; }
-        private int turn { get; set; }
-        private Color currentPlayer;
+        public int turn { get; private set; }
+        public Color currentPlayer { get; private set; }
         public bool finished { get; private set; }
 
         public ChessMatch()
@@ -19,12 +19,56 @@ namespace Chess_Game
             putPieces();
         }
 
-        public void movimentExecute(Position origin, Position destiny)
+        public void movementExecute(Position origin, Position destiny)
         {
             Piece p = board.removePiece(origin);
-            p.increaseMoviment();
+            p.increaseMovement();
             Piece capturedPiece = board.removePiece(destiny);
             board.putPiece(p, destiny);
+        }
+
+        public void makeaMovement(Position origin, Position destiny)
+        {
+            movementExecute(origin,destiny);
+            turn ++;
+            changePlayer();
+        
+        }
+
+        public void validationOfOriginPosition(Position pos)
+        {
+            if(board.piece(pos) == null)
+            {
+                throw new BoardException("There is no piece on origin position!");
+            }
+            if(currentPlayer != board.piece(pos).color)
+            {
+                throw new BoardException("The piece choosed is not yours!");
+            }
+            if(!board.piece(pos).possibleMovementExist())
+            {
+                throw new BoardException("There is no possible move for origin piece choosed!");
+            }
+        }
+
+        public void validationOfDestinyPosition(Position origin, Position destiny)
+        {
+            if(!board.piece(origin).canMoveFor(destiny))
+            {
+                throw new BoardException("Invalid destiny position!");
+            }
+        }
+
+        private void changePlayer()
+        {
+               if(currentPlayer == Color.White)
+               {
+                currentPlayer = Color.Black;
+               }
+               else
+               {
+                currentPlayer = Color.White;
+               }
         }
 
         private void putPieces()

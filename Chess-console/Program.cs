@@ -13,15 +13,19 @@ namespace chess_console
                 ChessMatch match = new ChessMatch();
                 while (!match.finished)
                 {
-                    Console.Clear();
+                    try
+                    {
+                        Console.Clear();
                     Screen.printBoard(match.board);
+                    Console.WriteLine("\nTurn: " + match.turn);
+                    Console.WriteLine($"Waiting for: {match.currentPlayer} player");
 
                     Console.WriteLine();
                     Console.Write("\nOrigin: ");
                     Position origin = Screen.readChessPosition().ToPosition();
+                    match.validationOfOriginPosition(origin);
 
-                    // Calcular posições possíveis
-                    bool[,] possiblePositions = match.board.piece(origin).possibleMoviments();
+                    bool[,] possiblePositions = match.board.piece(origin).possibleMovements();
 
                     Console.Clear();
                     Screen.printBoard(match.board, possiblePositions);
@@ -29,11 +33,17 @@ namespace chess_console
                     Console.WriteLine();
                     Console.Write("Destiny: ");
                     Position destiny = Screen.readChessPosition().ToPosition();
+                    match.validationOfDestinyPosition(origin, destiny);
 
-                    match.movimentExecute(origin, destiny);
+                    match.makeaMovement(origin, destiny);
+                    }
+                    catch (BoardException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        Console.ReadLine();
+                    }
+                    
                 }
-
-                Console.ReadLine();
             }
             catch (BoardException e)
             {

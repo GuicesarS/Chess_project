@@ -20,7 +20,7 @@ namespace chess_console
             Console.WriteLine("  a b c d e f g h");
         }
 
-        public static void printBoard(Board board, bool[,] possibleMoviment)
+        public static void printBoard(Board board, bool[,] possibleMovement)
         {
             ConsoleColor originBackground = Console.BackgroundColor;
             ConsoleColor changedBackground = ConsoleColor.DarkGray;
@@ -30,7 +30,7 @@ namespace chess_console
                 Console.Write(8 - i + " ");
                 for (int j = 0; j < board.columns; j++)
                 {
-                    if (possibleMoviment[i, j])
+                    if (possibleMovement[i, j])
                     { 
                         Console.BackgroundColor = changedBackground;
                     }

@@ -16,7 +16,7 @@ namespace Chess_Game
             Piece p = board.piece(pos);
             return p == null || p.color != this.color;
         }
-        public override bool[,] possibleMoviments()
+        public override bool[,] possibleMovements()
         {
             bool[,] mat = new bool[board.lines, board.columns];
 
