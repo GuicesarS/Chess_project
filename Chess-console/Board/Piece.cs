@@ -43,7 +43,7 @@ namespace board
             return false;
         }
 
-        public bool canMoveFor(Position pos)
+        public bool movementPossible(Position pos)
         {
             return possibleMovements()[pos.lines, pos.columns];
         }
