@@ -35,6 +35,27 @@ namespace Chess_Game
             {
                 captured.Add(capturedPiece);
             }
+
+            // # Special Move: Short Castling
+            if (p is King && destiny.columns == origin.columns + 2)
+            {
+                Position originTower = new Position(origin.lines, origin.columns + 3);
+                Position destinyTower = new Position(origin.lines, origin.columns + 1);
+                Piece tower = board.removePiece(originTower);
+                tower.increaseMovement();
+                board.putPiece(tower, destinyTower);
+            }
+
+            // # Special Move: Long Castling
+            if (p is King && destiny.columns == origin.columns - 2)
+            {
+                Position originTower = new Position(origin.lines, origin.columns - 4);
+                Position destinyTower = new Position(origin.lines, origin.columns - 1);
+                Piece tower = board.removePiece(originTower);
+                tower.increaseMovement();
+                board.putPiece(tower, destinyTower);
+            }
+
             return capturedPiece;
         }
 
@@ -48,6 +69,27 @@ namespace Chess_Game
                 captured.Remove(capturedPiece);
             }
             board.putPiece(p, origin);
+
+            // # Special Move: Short Castling
+            if (p is King && destiny.columns == origin.columns + 2)
+            {
+                Position originTower = new Position(origin.lines, origin.columns + 3);
+                Position destinyTower = new Position(origin.lines, origin.columns + 1);
+                Piece tower = board.removePiece(destinyTower);
+                tower.decrementmovement();
+                board.putPiece(tower, originTower);
+            }
+
+
+            // # Special Move: Long Castling
+            if (p is King && destiny.columns == origin.columns + 2)
+            {
+                Position originTower = new Position(origin.lines, origin.columns - 4);
+                Position destinyTower = new Position(origin.lines, origin.columns - 1);
+                Piece tower = board.removePiece(destinyTower);
+                tower.decrementmovement();
+                board.putPiece(tower, originTower);
+            }
         }
         public void makeaMovement(Position origin, Position destiny)
         {
@@ -230,7 +272,7 @@ namespace Chess_Game
             putNewPiece('b', 1, new Knight(board, Color.White));
             putNewPiece('c', 1, new Bishop(board, Color.White));
             putNewPiece('d', 1, new Queen(board, Color.White));
-            putNewPiece('e', 1, new King(board, Color.White));
+            putNewPiece('e', 1, new King(board, Color.White, this));
             putNewPiece('f', 1, new Bishop(board, Color.White));
             putNewPiece('g', 1, new Knight(board, Color.White));
             putNewPiece('h', 1, new Tower(board, Color.White));
@@ -247,7 +289,7 @@ namespace Chess_Game
             putNewPiece('b', 8, new Knight(board, Color.Black));
             putNewPiece('c', 8, new Bishop(board, Color.Black));
             putNewPiece('d', 8, new Queen(board, Color.Black));
-            putNewPiece('e', 8, new King(board, Color.Black));
+            putNewPiece('e', 8, new King(board, Color.Black, this));
             putNewPiece('f', 8, new Bishop(board, Color.Black));
             putNewPiece('g', 8, new Knight(board, Color.Black));
             putNewPiece('h', 8, new Tower(board, Color.Black));
