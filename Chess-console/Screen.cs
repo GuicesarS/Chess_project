@@ -1,11 +1,46 @@
 ﻿using System;
 using board;
 using Chess_Game;
+using System.Collections.Generic;
 
 namespace chess_console
 {
     class Screen
     {
+
+        public static void printMatch(ChessMatch match)
+        {
+            printBoard(match.board);
+            Console.WriteLine();
+            printCapturedPieces(match);
+            Console.WriteLine("\nTurn: " + match.turn);
+            Console.WriteLine($"Waiting for: {match.currentPlayer} player");
+        }
+
+        public static void printCapturedPieces(ChessMatch match)
+        {
+            Console.WriteLine("Captured Pieces: ");
+            Console.Write("White: ");
+            printCollection(match.capturedPieces(Color.White));
+
+            Console.Write("\nBlack: ");
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            printCollection(match.capturedPieces(Color.Black));
+            Console.ForegroundColor = aux;
+            Console.WriteLine("");
+
+        }
+
+        public static void printCollection(HashSet<Piece> collection)
+        {
+            Console.Write("[");
+            foreach (Piece x in collection)
+            {
+                Console.Write(x + " ");
+            }
+            Console.Write("]");
+        }
         public static void printBoard(Board board)
         {
             for (int i = 0; i < board.lines; i++)
@@ -31,7 +66,7 @@ namespace chess_console
                 for (int j = 0; j < board.columns; j++)
                 {
                     if (possibleMovement[i, j])
-                    { 
+                    {
                         Console.BackgroundColor = changedBackground;
                     }
                     else
@@ -39,12 +74,12 @@ namespace chess_console
                         Console.BackgroundColor = originBackground;
                     }
                     Screen.printPiece(board.piece(i, j));
-                    Console.BackgroundColor = originBackground; 
+                    Console.BackgroundColor = originBackground;
                 }
                 Console.WriteLine();
             }
             Console.WriteLine("  a b c d e f g h");
-            Console.BackgroundColor = originBackground; 
+            Console.BackgroundColor = originBackground;
         }
 
 

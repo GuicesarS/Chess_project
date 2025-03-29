@@ -16,12 +16,10 @@ namespace chess_console
                     try
                     {
                         Console.Clear();
-                    Screen.printBoard(match.board);
-                    Console.WriteLine("\nTurn: " + match.turn);
-                    Console.WriteLine($"Waiting for: {match.currentPlayer} player");
+                    Screen.printMatch(match);
 
                     Console.WriteLine();
-                    Console.Write("\nOrigin: ");
+                    Console.Write("Origin: ");
                     Position origin = Screen.readChessPosition().ToPosition();
                     match.validationOfOriginPosition(origin);
 
