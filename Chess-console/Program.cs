@@ -16,32 +16,34 @@ namespace chess_console
                     try
                     {
                         Console.Clear();
-                    Screen.printMatch(match);
+                        Screen.printMatch(match);
 
-                    Console.WriteLine();
-                    Console.Write("Origin: ");
-                    Position origin = Screen.readChessPosition().ToPosition();
-                    match.validationOfOriginPosition(origin);
+                        Console.WriteLine();
+                        Console.Write("Origin: ");
+                        Position origin = Screen.readChessPosition().ToPosition();
+                        match.validationOfOriginPosition(origin);
 
-                    bool[,] possiblePositions = match.board.piece(origin).possibleMovements();
+                        bool[,] possiblePositions = match.board.piece(origin).possibleMovements();
 
-                    Console.Clear();
-                    Screen.printBoard(match.board, possiblePositions);
+                        Console.Clear();
+                        Screen.printBoard(match.board, possiblePositions);
 
-                    Console.WriteLine();
-                    Console.Write("Destiny: ");
-                    Position destiny = Screen.readChessPosition().ToPosition();
-                    match.validationOfDestinyPosition(origin, destiny);
+                        Console.WriteLine();
+                        Console.Write("Destiny: ");
+                        Position destiny = Screen.readChessPosition().ToPosition();
+                        match.validationOfDestinyPosition(origin, destiny);
 
-                    match.makeaMovement(origin, destiny);
+                        match.makeaMovement(origin, destiny);
                     }
                     catch (BoardException e)
                     {
                         Console.WriteLine(e.Message);
                         Console.ReadLine();
                     }
-                    
                 }
+
+                Console.Clear();
+                Screen.printMatch(match);
             }
             catch (BoardException e)
             {

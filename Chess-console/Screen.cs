@@ -14,12 +14,24 @@ namespace chess_console
             Console.WriteLine();
             printCapturedPieces(match);
             Console.WriteLine("\nTurn: " + match.turn);
-            Console.WriteLine($"Waiting for: {match.currentPlayer} player");
-            
-            if(match.check)
+
+            if(!match.finished)
+            {
+                Console.WriteLine($"Waiting for: {match.currentPlayer} player");
+                 if(match.check)
             {
                 Console.WriteLine($"{match.currentPlayer.ToString().ToUpper()} PLAYER, YOU ARE IN CHECK!");
             }
+
+            }
+            else
+            {
+                Console.WriteLine("CHECKMATE!");
+                Console.WriteLine($"Winner is: {match.currentPlayer}");
+            }
+            
+            
+           
         }
 
         public static void printCapturedPieces(ChessMatch match)

@@ -58,7 +58,7 @@ namespace Chess_Game
                 throw new BoardException("You can't put yourself in Check!");
             }
 
-            if(isInCheck(adversary(currentPlayer)))
+            if (isInCheck(adversary(currentPlayer)))
             {
                 check = true;
             }
@@ -67,8 +67,16 @@ namespace Chess_Game
                 check = false;
             }
 
-            turn++;
-            changePlayer();
+            if (checkMateTest(adversary(currentPlayer)))
+            {
+                finished = true;
+            }
+            else
+            {
+                turn++;
+                changePlayer();
+            }
+
 
         }
 
@@ -179,6 +187,37 @@ namespace Chess_Game
             return false;
         }
 
+        public bool checkMateTest(Color color)
+        {
+            if (!isInCheck(color))
+            {
+                return false;
+            }
+
+            foreach (Piece x in piecesInGame(color))
+            {
+                bool[,] mat = x.possibleMovements();
+                for (int i = 0; i < board.lines; i++)
+                {
+                    for (int j = 0; j < board.columns; j++)
+                    {
+                        if (mat[i, j])
+                        {
+                            Position origin = x.position;
+                            Position destiny = new Position(i, j);
+                            Piece capturedPiece = movementExecute(origin, destiny);
+                            bool checkTest = isInCheck(color);
+                            undoMovement(origin, destiny, capturedPiece);
+                            if (!checkTest)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
         public void putNewPiece(char columns, int lines, Piece piece)
         {
             board.putPiece(piece, new PositionChess(columns, lines).ToPosition());
@@ -188,18 +227,11 @@ namespace Chess_Game
         {
 
             putNewPiece('c', 1, new Tower(board, Color.White));
-            putNewPiece('c', 2, new Tower(board, Color.White));
-            putNewPiece('d', 2, new Tower(board, Color.White));
-            putNewPiece('e', 2, new Tower(board, Color.White));
-            putNewPiece('e', 1, new Tower(board, Color.White));
             putNewPiece('d', 1, new King(board, Color.White));
-
-            putNewPiece('c', 7, new Tower(board, Color.Black));
-            putNewPiece('c', 8, new Tower(board, Color.Black));
-            putNewPiece('d', 7, new Tower(board, Color.Black));
-            putNewPiece('e', 7, new Tower(board, Color.Black));
-            putNewPiece('e', 8, new Tower(board, Color.Black));
-            putNewPiece('d', 8, new King(board, Color.Black));
+            putNewPiece('h', 7, new Tower(board, Color.White));
+            
+            putNewPiece('a', 8, new King(board, Color.Black));
+            putNewPiece('b', 8, new Tower(board, Color.Black));
 
 
 
