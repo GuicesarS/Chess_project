@@ -11,6 +11,7 @@ namespace Chess_Game
         public bool finished { get; private set; }
         private HashSet<Piece> pieces;
         private HashSet<Piece> captured;
+        public bool check { get; private set; }
 
         public ChessMatch()
         {
@@ -18,42 +19,70 @@ namespace Chess_Game
             turn = 1;
             currentPlayer = Color.White;
             finished = false;
+            check = false;
             pieces = new HashSet<Piece>();
             captured = new HashSet<Piece>();
             putPieces();
         }
 
-        public void movementExecute(Position origin, Position destiny)
+        public Piece movementExecute(Position origin, Position destiny)
         {
             Piece p = board.removePiece(origin);
             p.increaseMovement();
             Piece capturedPiece = board.removePiece(destiny);
             board.putPiece(p, destiny);
-            if(capturedPiece != null)
+            if (capturedPiece != null)
             {
                 captured.Add(capturedPiece);
             }
+            return capturedPiece;
         }
 
+        public void undoMovement(Position origin, Position destiny, Piece capturedPiece)
+        {
+            Piece p = board.removePiece(destiny);
+            p.decrementmovement();
+            if (capturedPiece != null)
+            {
+                board.putPiece(capturedPiece, destiny);
+                captured.Remove(capturedPiece);
+            }
+            board.putPiece(p, origin);
+        }
         public void makeaMovement(Position origin, Position destiny)
         {
-            movementExecute(origin,destiny);
-            turn ++; 
+            Piece capturedPiece = movementExecute(origin, destiny);
+            if (isInCheck(currentPlayer))
+            {
+                undoMovement(origin, destiny, capturedPiece);
+                throw new BoardException("You can't put yourself in Check!");
+            }
+
+            if(isInCheck(adversary(currentPlayer)))
+            {
+                check = true;
+            }
+            else
+            {
+                check = false;
+            }
+
+            turn++;
             changePlayer();
-        
+
         }
 
         public void validationOfOriginPosition(Position pos)
         {
-            if(board.piece(pos) == null)
+            if (board.piece(pos) == null)
             {
                 throw new BoardException("There is no piece on origin position!");
             }
-            if(currentPlayer != board.piece(pos).color)
+            if (currentPlayer != board.piece(pos).color)
             {
                 throw new BoardException("The piece choosed is not yours!");
             }
-            if(!board.piece(pos).possibleMovementExist())
+            if (!board.piece(pos).possibleMovementExist())
             {
                 throw new BoardException("There is no possible move for origin piece choosed!");
             }
@@ -61,7 +90,7 @@ namespace Chess_Game
 
         public void validationOfDestinyPosition(Position origin, Position destiny)
         {
-            if(!board.piece(origin).canMoveFor(destiny))
+            if (!board.piece(origin).canMoveFor(destiny))
             {
                 throw new BoardException("Invalid destiny position!");
             }
@@ -69,22 +98,22 @@ namespace Chess_Game
 
         private void changePlayer()
         {
-               if(currentPlayer == Color.White)
-               {
+            if (currentPlayer == Color.White)
+            {
                 currentPlayer = Color.Black;
-               }
-               else
-               {
+            }
+            else
+            {
                 currentPlayer = Color.White;
-               }
+            }
         }
 
         public HashSet<Piece> capturedPieces(Color color)
         {
             HashSet<Piece> aux = new HashSet<Piece>();
-            foreach(Piece x in captured)
+            foreach (Piece x in captured)
             {
-                if(x.color == color)
+                if (x.color == color)
                 {
                     aux.Add(x);
                 }
@@ -95,9 +124,9 @@ namespace Chess_Game
         public HashSet<Piece> piecesInGame(Color color)
         {
             HashSet<Piece> aux = new HashSet<Piece>();
-            foreach(Piece x in pieces)
+            foreach (Piece x in pieces)
             {
-                if(x.color == color)
+                if (x.color == color)
                 {
                     aux.Add(x);
                 }
@@ -107,9 +136,52 @@ namespace Chess_Game
         }
 
 
+        private Color adversary(Color color)
+        {
+            if (color == Color.White)
+            {
+                return Color.Black;
+            }
+            else
+            {
+                return Color.White;
+            }
+        }
+
+        private Piece king(Color color)
+        {
+            foreach (Piece x in piecesInGame(color))
+            {
+                if (x is King)
+                {
+                    return x;
+                }
+            }
+            return null;
+        }
+
+        public bool isInCheck(Color color)
+        {
+            Piece k = king(color);
+            if (k == null)
+            {
+                throw new BoardException($"There is no {color} King on board!");
+            }
+
+            foreach (Piece x in piecesInGame(adversary(color)))
+            {
+                bool[,] mat = x.possibleMovements();
+                if (mat[k.position.lines, k.position.columns])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void putNewPiece(char columns, int lines, Piece piece)
         {
-            board.putPiece(piece, new PositionChess (columns, lines).ToPosition());
+            board.putPiece(piece, new PositionChess(columns, lines).ToPosition());
             pieces.Add(piece);
         }
         private void putPieces()
@@ -129,7 +201,7 @@ namespace Chess_Game
             putNewPiece('e', 8, new Tower(board, Color.Black));
             putNewPiece('d', 8, new King(board, Color.Black));
 
-          
+
 
 
 
