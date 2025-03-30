@@ -113,14 +113,18 @@ namespace Chess_Game
             }
 
             // Special Move: En Passant
-            if (p is Pawn) {
-                if (origin.columns != destiny.columns && capturedPiece == vulnerableEnPassant) {
+            if (p is Pawn)
+            {
+                if (origin.columns != destiny.columns && capturedPiece == vulnerableEnPassant)
+                {
                     Piece pawn = board.removePiece(destiny);
                     Position posP;
-                    if (p.color == Color.White) {
+                    if (p.color == Color.White)
+                    {
                         posP = new Position(3, destiny.columns);
                     }
-                    else {
+                    else
+                    {
                         posP = new Position(4, destiny.columns);
                     }
                     board.putPiece(pawn, posP);
@@ -137,6 +141,19 @@ namespace Chess_Game
                 throw new BoardException("You can't put yourself in Check!");
             }
 
+            Piece p = board.piece(destiny);
+            // # Special Move: Pawn Promotion
+            if (p is Pawn)
+            {
+                if ((p.color == Color.White && destiny.lines == 0) || (p.color == Color.Black && destiny.lines == 0))
+                {
+                    p = board.removePiece(destiny);
+                    pieces.Remove(p);
+                    Piece queen = new Queen(board, p.color);
+                    board.putPiece(queen, destiny);
+                    pieces.Add(queen);
+                }
+            }
             if (isInCheck(adversary(currentPlayer)))
             {
                 check = true;
@@ -156,7 +173,7 @@ namespace Chess_Game
                 changePlayer();
             }
 
-            Piece p = board.piece(destiny);
+
 
             // #Special Move: En Passant
             if (p is Pawn && (destiny.lines == origin.lines - 2 || destiny.lines == origin.lines + 2))
