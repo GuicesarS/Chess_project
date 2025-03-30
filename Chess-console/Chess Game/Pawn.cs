@@ -4,7 +4,11 @@ namespace Chess_Game
 {
     class Pawn : Piece
     {
-        public Pawn(Board board, Color color) : base(board, color) { }
+        private ChessMatch match;
+        public Pawn(Board board, Color color, ChessMatch match) : base(board, color)
+        {
+            this.match = match;
+        }
 
         public override string ToString()
         {
@@ -51,6 +55,20 @@ namespace Chess_Game
                 {
                     mat[pos.lines, pos.columns] = true;
                 }
+
+                // Special Move: En Passant
+                if (position.lines == 3)
+                {
+                    Position left = new Position(position.lines, position.columns - 1);
+                    if (board.validPosition(left) && hasEnemy(left) && board.piece(left) == match.vulnerableEnPassant)
+                        mat[left.lines -1, left.columns] = true;
+
+                    Position right = new Position(position.lines, position.columns + 1);
+                    if (board.validPosition(right) && hasEnemy(right) && board.piece(right) == match.vulnerableEnPassant)
+                        mat[right.lines -1, right.columns] = true;
+                }
+
+
             }
             else
             {
@@ -75,6 +93,23 @@ namespace Chess_Game
                 {
                     mat[pos.lines, pos.columns] = true;
                 }
+
+                // Special Move: En Passant
+                if (position.lines == 4)
+                {
+                    Position left = new Position(position.lines, position.columns - 1);
+                    if (board.validPosition(left) && hasEnemy(left) && board.piece(left) == match.vulnerableEnPassant)
+                    {
+                          mat[left.lines + 1, left.columns] = true;
+                    }
+                    Position right = new Position(position.lines, position.columns + 1);
+                    if (board.validPosition(right) && hasEnemy(right) && board.piece(right) == match.vulnerableEnPassant)
+                    {
+                        mat[right.lines + 1, right.columns] = true;
+                    }
+                        
+                }
+
             }
 
             return mat;
