@@ -50,4 +50,4 @@ git clone https://github.com/GuicesarS/Chess_project
 ````
 ---
 
-📄 Disponível em: [English](README.md) | [Português](README.pt.md)
+📄 Disponível em: [Inglês](README.md)
