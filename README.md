@@ -49,4 +49,4 @@ This project was developed during my learning journey in software development an
 git clone https://github.com/GuicesarS/Chess_project
 ````
 ---
-📄 Available in: [English](README.md) | [Português](README.pt.md)
+📄 Available in: [English](README.md) | [Portuguese](README.pt.md)
